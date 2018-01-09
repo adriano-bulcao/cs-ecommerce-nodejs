@@ -2,10 +2,10 @@ const request = require('supertest');
 const app = require('../../app');
 
 describe('Validating user API', () =>{
-    test('GET should be xablau', () =>{
+    test('It should return status 200 and "respo"', () =>{
         return request(app).get('/users').then((response) => {
             expect(response.statusCode).toBe(200);
-            expect(response.text).toBe('respond with a resource');
+            expect(response.text).toBe('response from user API');
         });
     });
 });
