@@ -14,7 +14,8 @@
     "mongodb": "~2.2.31",
     "morgan": "~1.9.0",
     "jest": "^22.0.5",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "joi": "^13.1.0"
   },
   "devDependencies": {
     "jest": "^22.0.5",

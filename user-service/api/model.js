@@ -1,10 +1,11 @@
-'use strict'
+'use strict';
 
-const format = record => ({
-    id: record._id,
-    username: record.username,
-    email: record.email,
-    password: record.password
-})
+const Joi = require('joi');
 
-exports.format = format
+const schema = Joi.object().keys({
+    username: Joi.string().alphanum().min(3).max(30).required(),
+    password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
+    email: Joi.string().email()
+});
+
+exports.schema = schema;

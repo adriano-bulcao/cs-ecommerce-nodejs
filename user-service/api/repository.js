@@ -2,7 +2,8 @@
 
 const { mongo } = require('../helpers/db')
 const env = require('../helpers/env')
-const format = require('./model').format
+const schema = require('./model').schema
+const Joi = require('joi');
 
 const dependencies = {
   db: mongo,
@@ -11,21 +12,30 @@ const dependencies = {
 
 const factory = ({ db, collectionName }) => {
   return {
-    create: data =>
-      db.collection(collectionName)
-        .insertOne(format(data))
-        .then(result => format(result.ops[0])),
+    create: data => {
+      return new Promise(function (resolve, reject) {
+        const result = Joi.validate(data, schema);
+
+        if (result.error) {
+          reject(result.error);
+        } else {
+          resolve(db.collection(collectionName)
+          .insertOne(data)
+          .then(result => result.ops[0]))
+        }
+      });
+    },
 
     retrieve: () =>
       db.collection(collectionName)
         .find()
         .toArray()
-        .then(records => records.map(format)),
+        .then(records => records),
 
-    getById: id =>
+    getById: (id) =>
       db.collection(collectionName)
         .findOne({ _id: mongo.ObjectID(id) })
-        .then(format)
+        .then(record => record)
   }
 }
 
