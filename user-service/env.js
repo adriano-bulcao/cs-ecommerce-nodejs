@@ -10,7 +10,7 @@ module.exports = {
   db: {
     url: process.env.DB_URL,
     collenctions: {
-      message: process.env.DB_COLLECTION_MESSAGES
+      users: process.env.DB_COLLECTION_USERS
     }
   }
 }

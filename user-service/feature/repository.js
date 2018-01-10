@@ -2,6 +2,7 @@
 
 const { mongo } = require('../db')
 const env = require('../env')
+const format = require('./model').format
 
 const dependencies = {
   db: mongo,
@@ -9,12 +10,10 @@ const dependencies = {
 }
 
 const factory = ({ db, collectionName }) => {
-  const format = record => ({ id: record._id, text: record.text })
-
   return {
     create: data =>
       db.collection(collectionName)
-        .insertOne({ text: data.text })
+        .insertOne(format(data))
         .then(result => format(result.ops[0])),
 
     retrieve: () =>
