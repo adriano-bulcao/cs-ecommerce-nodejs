@@ -1,8 +1,8 @@
 'use strict'
 
 const app = require('./app')
-const env = require('./env')
-const { mongo } = require('./db')
+const env = require('./helpers/env')
+const { mongo } = require('./helpers/db')
 
 mongo.connect(env.db.url)
   .then(() =>

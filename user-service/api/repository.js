@@ -1,7 +1,7 @@
 'use strict'
 
-const { mongo } = require('../db')
-const env = require('../env')
+const { mongo } = require('../helpers/db')
+const env = require('../helpers/env')
 const format = require('./model').format
 
 const dependencies = {

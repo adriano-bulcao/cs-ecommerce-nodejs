@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const app = express()
 
 app.use(bodyParser.json())
-app.use('/users', require('./feature'))
+app.use('/users', require('./api'))
 
 app.use('/*', (request, response) =>
   response.status(404).json({
