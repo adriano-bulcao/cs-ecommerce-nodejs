@@ -7,12 +7,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "axios": "^0.17.1",
     "body-parser": "~1.18.2",
-    "dotenv": "^4.0.0",
     "debug": "~2.6.9",
+    "dotenv": "^4.0.0",
     "express": "~4.15.5",
-    "morgan": "~1.9.0",
-    "joi": "^13.1.0"
+    "joi": "^13.1.0",
+    "jsonwebtoken": "^8.1.0",
+    "morgan": "~1.9.0"
   },
   "devDependencies": {
     "jest": "^22.0.5",
