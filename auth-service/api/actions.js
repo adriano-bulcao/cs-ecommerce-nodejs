@@ -9,29 +9,27 @@ const jwt = require('jsonwebtoken');
 const factory = () => ({
   signin: (request, response, next) => {
 
-    const data = {
-      username: request.body.username,
-      password: request.body.password
-    }
+    new Promise((resolve, reject) => {
 
-    const result = Joi.validate(data, schema);
+      const data = { username: request.body.username, password: request.body.password }
 
-    if (result.error) {
-      next(result.error);
-    } else {
+      const result = Joi.validate(data, schema);
 
-      axios.get(`${env.app.userService}?username=${data.username}&password=${data.password}`)
-        .then(result => {
-
-          if (result.data) {
-            response.status(200).json(jwt.sign({ email: result.data.email, username: result.data.username, id: result.data._id }, 'RESTFULAPIs'));
-          } else {
-            response.status(400).json("Invalid Login or Password.")
-          }
-
-        })
-        .catch(next)
-    }
+      if (result.error) {
+        reject(result.error);
+      } else {
+        resolve(data);
+      }
+      
+    }).then(result => axios.get(`${env.app.userService}?username=${result.username}&password=${result.password}`))
+      .then(result => {
+        if (result.data) {
+          response.status(200).json(jwt.sign({ email: result.data.email, username: result.data.username, id: result.data._id }, 'RESTFULAPIs'));
+        } else {
+          response.status(400).json("Invalid Login or Password.")
+        }
+      })
+      .catch(next)
   }
 })
 
