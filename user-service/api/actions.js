@@ -8,10 +8,12 @@ const factory = ({ repository }) => ({
       .then(user => response.status(201).json(user))
       .catch(next),
 
-  signin: (request, response, next) => 
-      repository.getByCredentials(request.body)
+  getByCredentials: (request, response, next) => {
+    repository.getByCredentials({ username: request.query.username, password: request.query.password })
       .then(user => response.status(200).json(user))
       .catch(next)
+  }
+
 })
 
 exports.factory = factory

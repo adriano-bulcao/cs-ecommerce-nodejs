@@ -1,6 +1,6 @@
 'use strict'
 
-const dotenv = require('dotenv').config({path: './user-service/config/.env'});
+const dotenv = require('dotenv').config({path: './config/.env'});
 
 module.exports = {
   name: process.env.NODE_ENV,
