@@ -2,10 +2,6 @@
 
 const dotenv = require('dotenv').config({path: './user-service/config/.env'});
 
-if (dotenv) { 
-  console.log(dotenv)
-}
-
 module.exports = {
   name: process.env.NODE_ENV,
   app: {
