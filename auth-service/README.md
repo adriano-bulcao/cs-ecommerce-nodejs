@@ -29,6 +29,9 @@ The motivation with this module is to provide a high-level abstraction for testi
 - [joi](https://github.com/hapijs/joi)
 Object schema description language and validator for JavaScript objects.
 
+- [jwt](https://www.npmjs.com/package/jsonwebtoken)
+An implementation of JSON Web Tokens. JSON Web Token (JWT) is a compact, URL-safe means of representing claims to be transferred between two parties. The claims in a JWT are encoded as a JSON object that is used as the payload of a JSON Web Signature (JWS) structure or as the plaintext of a JSON Web Encryption (JWE) structure, enabling the claims to be digitally signed or integrity protected with a Message Authentication Code (MAC) and/or encrypted.
+
 # Commands to install project
 
 - npm install
