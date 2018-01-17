@@ -2,9 +2,10 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+const db = require("./helpers/db");
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var shippings = require('./routes/shippings');
 
 var app = express();
 
@@ -12,8 +13,10 @@ app.use(logger('dev'));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+db.connect("mongodb://localhost:27017/shippingDb");
+
 app.use('/', index);
-app.use('/users', users);
+app.use('/shippings', shippings);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -30,7 +33,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  //res.render('error');
+  console.log(err);
 });
 
 module.exports = app;
