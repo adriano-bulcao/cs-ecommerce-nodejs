@@ -16,11 +16,20 @@ const factory = ({ db, collectionName }) => {
                 db.collection(collectionName)
                     .find()
                     .toArray()
-                    .then(orders => existingOrders = orders)
+                    .then(orders => resolve(orders))
                     .catch(error => reject(error));
-                resolve(existingOrders);
             });
-        }
+        },
+        create: order => {
+            return new Promise((resolve, reject) => {
+                try {
+                    const response = db.collection(collectionName).insert(order);
+                    resolve(response);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        },
     }
 }
 
