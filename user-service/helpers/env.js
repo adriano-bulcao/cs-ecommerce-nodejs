@@ -1,16 +1,17 @@
 'use strict'
 
-const dotenv = require('dotenv').config({path: './config/.env'});
+const dotenv = require('dotenv').config({ path: './config/.env' });
 
 module.exports = {
-  name: process.env.NODE_ENV,
-  app: {
-    port: process.env.PORT
-  },
-  db: {
-    url: process.env.DB_URL,
-    collenctions: {
-      users: process.env.DB_COLLECTION_USERS
+    name: process.env.NODE_ENV,
+    app: {
+        port: process.env.PORT
+    },
+    db: {
+        name: process.env.DB_NAME,
+        url: process.env.DB_URL,
+        collections: {
+          users: process.env.DB_COLLECTION_USERS
+        }
     }
-  }
 }
