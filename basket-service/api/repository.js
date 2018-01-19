@@ -11,13 +11,17 @@ const dependencies = {
 const factory = ({ db, collectionName }) => {
     return {
 
-        getById: (orderId) => {
-            return db.collection(collectionName).findOne({ "_id": db.ObjectID(orderId) });
+        getById: (basketId) => {
+            return db.collection(collectionName).findOne({ "_id": db.ObjectID(basketId) });
         },
 
-        create: (basket) => {
-            return db.collection(collectionName).insert(basket);
+        create: () => {
+            return db.collection(collectionName).insert({});
         },
+
+        update: (basket) => {
+            return db.collection(collectionName).replaceOne({ "_id": db.ObjectID(basket._id) }, basket);
+        }
     }
 }
 
