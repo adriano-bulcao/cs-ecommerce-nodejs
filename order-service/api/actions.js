@@ -17,22 +17,31 @@ const factory = ({ repository }) => ({
 
     create: async (request, response, next) => {
         try {
-
-            const validation = Joi.validate(request.body, schema);
-
+            const order = request.body;
+            order.date = new Date();            
+            const validation = Joi.validate(order, schema);
             if (validation.error) {
                 response.status(400).json(validation.error.details);
                 return;
             }
-
             var result = await repository.create(request.body);
-
             response.status(201).send();
 
         } catch (error) {
             next(error);
         }
     },
+
+    getById : async(request, response, next) => {
+        try {
+            const orderId = request.params.id;
+            const order = await repository.getById(orderId);
+            response.status(200).json(order);
+        } catch (error) {
+            next(error);
+        }
+    },
+
 });
 
 exports.factory = factory;
