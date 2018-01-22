@@ -21,6 +21,9 @@ const factory = ({ db, collectionName }) => {
 
         update: (basket) => {
             return db.collection(collectionName).replaceOne({ "_id": db.ObjectID(basket._id) }, basket);
+        },
+        remove: (id) => {
+            return db.collection(collectionName).remove({ "_id": db.ObjectID(basket._id) });
         }
     }
 }

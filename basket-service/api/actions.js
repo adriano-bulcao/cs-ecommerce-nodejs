@@ -49,8 +49,68 @@ const factory = ({ repository }) => ({
         }
 
     },
-    updateQuantity: async (request, response, next) => { },
-    removeItem: async (request, response, next) => { },
+    updateQuantity: async (request, response, next) => { 
+
+        try {
+            const basketId = request.params.basketid;
+            const itemId = request.params.itemid;
+            const quantity = request.body.quantity;
+            const basket = await repository.getById(basketId);
+
+            if (!basket) {
+                response.status(404).json({ message: "Basket not found!" });
+                return;
+            }
+
+            const item = basket.items.find(it => it.productId == itemId);
+
+            if (!item) {
+                response.status(400).json({ message: `The item ${itemId} was not found!`});
+                return;
+            }
+
+            item.quantity = quantity;
+
+            const result = await repository.update(basket);
+            
+            response.status(200).json(basket);
+
+        } catch (error) {
+            next(error);
+        }
+
+    },
+    removeItem: async (request, response, next) => {
+        try{
+            const basketId = request.params.basketid;
+            const itemId = request.params.itemid;
+            const quantity = request.body.quantity;
+            const basket = await repository.getById(basketId);
+
+            if (!basket) {
+                response.status(404).json({ message: "Basket not found!" });
+                return;
+            }
+
+            const item = basket.items.find(it => it.productId == itemId);
+
+            if (!item) {
+                response.status(400).json({ message: `The item ${itemId} was not found!`});
+                return;
+            }
+
+            const index = basket.items.indexOf(item);
+
+            basket.items.splice(index, 1);
+
+            var result = repository.update(basket);
+
+            response.status(200).json(basket);
+
+        }catch(error){
+            next(error);
+        }
+     },
     checkout: async (request, response, next) => { },
 });
 
