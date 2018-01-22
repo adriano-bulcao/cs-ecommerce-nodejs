@@ -23,24 +23,38 @@ const factory = ({ db, collectionName }) => {
           reject(result.error)
         } else {
           resolve(db.collection(collectionName)
-            .insertOne({
-              email: data.email,
-              username: data.username,
-              password: bcrypt.hashSync(data.password, 10)
+            .findOne({
+              username: data.username
             })
             .then(function (user) {
-              if (!user.ops[0]) {
+              if (user) {
                 return {
                   success: false,
-                  message: 'User Was Not Created',
+                  message: 'User already exists',
                   data: null
                 }
-              }
+              } else {
+                db.collection(collectionName)
+                  .insertOne({
+                    email: data.email,
+                    username: data.username,
+                    password: bcrypt.hashSync(data.password, 10)
+                  })
+                  .then(function (user) {
+                    if (!user.ops[0]) {
+                      return {
+                        success: false,
+                        message: 'User Was Not Created',
+                        data: null
+                      }
+                    }
 
-              return {
-                success: true,
-                message: '',
-                data: user.ops[0]
+                    return {
+                      success: true,
+                      message: '',
+                      data: user.ops[0]
+                    }
+                  })
               }
             })
           )
@@ -98,8 +112,8 @@ const factory = ({ db, collectionName }) => {
                   success: false,
                   message: 'Authentication failed. Wrong User.',
                   data: null
-                };
-              } else if (user) {
+                }
+              } else {
                 if (!bcrypt.compareSync(data.password, user.password)) {
                   return {
                     success: false,
@@ -125,5 +139,6 @@ const factory = ({ db, collectionName }) => {
     }
   }
 }
+
 exports.factory = factory
 exports.repository = factory(dependencies)
