@@ -19,14 +19,11 @@ const factory = ({ repository }) => ({
         try {
             const order = request.body;
             order.date = new Date();
-            
             let total = 0;
-
             order.items.forEach(product => {
                 const subtotal = product.price * product.quantity;
                 total += subtotal;
             });
-
             order.total = total;
 
             const validation = Joi.validate(order, schema);
