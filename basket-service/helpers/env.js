@@ -13,5 +13,8 @@ module.exports = {
         collections: {
             basket: process.env.DB_COLLECTION_BASKET
         }
+    },
+    external :{
+        ordersAPI : process.env.ORDERS_API_URL,
     }
 }

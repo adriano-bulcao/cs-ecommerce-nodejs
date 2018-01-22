@@ -2,13 +2,20 @@
 
 const Joi = require('joi');
 const { repository } = require('./repository');
-// const { schema } = require('./model');
+const axios = require('axios');
+const env = require('../helpers/env');
+
 
 
 const factory = ({ repository }) => ({
     getById: async (request, response, next) => {
         try {
             const basket = await repository.getById(request.params.id);
+            if (!basket) {
+                response.status(404).json({ message: "Basket not found!" });
+                return;
+            }
+
             response.status(200).json(basket);
         } catch (error) {
             next(error);
@@ -37,19 +44,26 @@ const factory = ({ repository }) => ({
                 response.status(404).json({ message: "Basket not found!" });
                 return;
             }
+
+            if(!basket.items)
+                basket.items = [];
+
             if (basket.items.some(it => it.productId == item.productId)) {
-                response.status(400).json({ message: `The product '${item.productId}' is already added!`});
+                response.status(400).json({ message: `The product '${item.productId}' is already added!` });
                 return;
             }
+
             basket.items.push(item);
+            
             const result = await repository.update(basket);
+            
             response.status(200).json(basket);
         } catch (error) {
             next(error);
         }
 
     },
-    updateQuantity: async (request, response, next) => { 
+    updateQuantity: async (request, response, next) => {
 
         try {
             const basketId = request.params.basketid;
@@ -65,14 +79,14 @@ const factory = ({ repository }) => ({
             const item = basket.items.find(it => it.productId == itemId);
 
             if (!item) {
-                response.status(400).json({ message: `The item ${itemId} was not found!`});
+                response.status(400).json({ message: `The item ${itemId} was not found!` });
                 return;
             }
 
             item.quantity = quantity;
 
             const result = await repository.update(basket);
-            
+
             response.status(200).json(basket);
 
         } catch (error) {
@@ -81,7 +95,7 @@ const factory = ({ repository }) => ({
 
     },
     removeItem: async (request, response, next) => {
-        try{
+        try {
             const basketId = request.params.basketid;
             const itemId = request.params.itemid;
             const quantity = request.body.quantity;
@@ -95,7 +109,7 @@ const factory = ({ repository }) => ({
             const item = basket.items.find(it => it.productId == itemId);
 
             if (!item) {
-                response.status(400).json({ message: `The item ${itemId} was not found!`});
+                response.status(400).json({ message: `The item ${itemId} was not found!` });
                 return;
             }
 
@@ -107,11 +121,37 @@ const factory = ({ repository }) => ({
 
             response.status(200).json(basket);
 
-        }catch(error){
+        } catch (error) {
             next(error);
         }
-     },
-    checkout: async (request, response, next) => { },
+    },
+    checkout: async (request, response, next) => {
+        try {
+            const basketId = request.params.id;
+            const basket = await repository.getById(basketId);
+            const customerId = request.body.customerId;
+
+            if (!basket) {
+                response.status(404).json({ message: "Basket not found!" });
+                return;
+            }
+
+            const url = `${env.external.ordersAPI}/orders`;
+
+            var data = {
+                customerId,
+                items : basket.items,
+                total : basket.total
+            }
+
+            const result = await axios.post(url, data);
+
+            response.status(200).json({message: "OK"});
+
+        } catch (error) {
+            next(error);
+        }
+    },
 });
 
 exports.factory = factory;
