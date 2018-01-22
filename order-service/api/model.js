@@ -12,7 +12,7 @@ const schema = {
             productName: Joi.string().required()
         })),
     date: Joi.date().required(),
-    total: Joi.number().required()
+    total: Joi.number()
 };
 
 exports.schema = schema;
