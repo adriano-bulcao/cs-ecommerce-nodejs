@@ -5,8 +5,6 @@ const { repository } = require('./repository');
 const axios = require('axios');
 const env = require('../helpers/env');
 
-
-
 const factory = ({ repository }) => ({
     create: async (request, response, next) => {
         try {
