@@ -1,5 +1,5 @@
 module.exports = {
-    idle: 0,
+    notStarted: 0,
     packing: 10,
     inTransit: 20,
     delivered: 30,

@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const db = require("./helpers/db");
 
 var index = require('./routes/index');
@@ -9,6 +10,7 @@ var shippings = require('./routes/shippings');
 
 var app = express();
 
+app.use(bodyParser.json());
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));

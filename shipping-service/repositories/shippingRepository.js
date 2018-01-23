@@ -1,11 +1,11 @@
 "use strict";
 
 const db = require('./../helpers/db');
+//const shippings = db.get().collection("shipping");
 
 module.exports = {
-    insert: function (product) {
-        db.get().collection("shipping").insertOne(product);
-        //.then(result => format(result.ops[0]))
+    insert: function (shipping) {
+        return db.get().collection("shipping").insertOne(shipping);
     },
 
     find: function () {
