@@ -4,11 +4,11 @@ const Joi = require('joi');
 const { repository } = require('./repository');
 const { schema } = require('./model');
 
-const factory = (repository) => ({
+const factory = rep => ({
 
   getAll: async (request, response, next) => {
     try {
-      const orders = await repository.getAll();
+      const orders = await rep.getAll();
       response.status(200).json(orders);
     } catch (error) {
       next(error);
@@ -33,7 +33,7 @@ const factory = (repository) => ({
         return;
       }
 
-      await repository.create(request.body);
+      await rep.create(request.body);
 
       response.status(201).send();
     } catch (error) {
@@ -44,7 +44,7 @@ const factory = (repository) => ({
   getById: async (request, response, next) => {
     try {
       const orderId = request.params.id;
-      const order = await repository.getById(orderId);
+      const order = await rep.getById(orderId);
       response.status(200).json(order);
     } catch (error) {
       next(error);
