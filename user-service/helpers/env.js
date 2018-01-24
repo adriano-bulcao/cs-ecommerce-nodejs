@@ -13,5 +13,5 @@ module.exports = {
         collections: {
           users: process.env.DB_COLLECTION_USERS
         }
-    }
+    }    
 }

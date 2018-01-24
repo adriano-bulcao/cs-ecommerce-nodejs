@@ -18,14 +18,14 @@ const factory = () => ({
     } else {
       const result = await axios.get(`${env.app.userService}?username=${data.username}&password=${data.password}`);
 
-      if (result.data) {
+      if (result.success) {
         response.status(200).json(jwt.sign({
           email: result.data.email,
           username: result.data.username,
           id: result.data._id
-        }, 'RESTFULAPIs'));
+        }, env.app.secret));
       } else {
-        response.status(400).json("Invalid Login or Password.")
+        response.status(400).json(result.message)
       }
     }
   }

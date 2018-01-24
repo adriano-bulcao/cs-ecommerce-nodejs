@@ -17,6 +17,8 @@ app.use((error, request, response, next) => {
     error: 'Internal',
     message: error.message,
   });
+
+  next();
 });
 
 module.exports = app;
