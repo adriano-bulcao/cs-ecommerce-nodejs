@@ -34,6 +34,9 @@ const factory = rep => ({
       const order = request.body;
       order.date = new Date();
       let total = 0;
+
+      if (!order.items) order.items = [];
+
       order.items.forEach((product) => {
         const subtotal = product.price * product.quantity;
         total += subtotal;

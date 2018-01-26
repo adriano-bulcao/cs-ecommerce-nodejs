@@ -1,5 +1,3 @@
-
-
 const request = require('supertest');
 const app = require('../app');
 const { database } = require('../helpers/db');
@@ -19,7 +17,6 @@ const order = {
     ]
 };
 
-
 describe('Routes: Orders', () => {
 
     beforeAll((done) => initializeDatabase(done), 15000);
@@ -35,23 +32,57 @@ describe('Routes: Orders', () => {
             expect(response.body).toHaveLength(1);
             expect(orderResponse.customerId).toEqual(1);
             expect(orderResponse.date).toEqual(order.date);
-        }); 
+        });
     });
 
     describe('GET /orders/:id', () => {
+
         test('Should get order by id', async () => {
             const responseAll = await request(app).get('/orders');
-            var orderResponse = responseAll.body[0];            
+            var orderResponse = responseAll.body[0];
             const response = await request(app).get(`/orders/${orderResponse._id}`);
             expect(response.statusCode).toBe(200);
             expect(orderResponse.customerId).toEqual(1);
             expect(orderResponse.date).toEqual(order.date);
         });
 
-        test('It should return 404 with id that does not exist', async () => {            
+        test('It should return 404 with id that does not exist', async () => {
             const response = await request(app).get(`/orders/5a6b8e3c9d9564be889eefd9`);
             expect(response.statusCode).toBe(404);
             expect(response.body).toEqual({});
+        });
+
+    });
+
+    describe('POST /orders', () => {
+
+        test('It should create an order and return 201 status code', async () => {
+            const fakeData = {
+                "customerId": "5865cf65321g",
+                "items": [
+                    {
+                        "productId": "568y6h5g45d6592",
+                        "productName": "Produto 01",
+                        "price": 23.99,
+                        "quantity": 1
+                    }
+                ],
+                "date": "2017-01-18",
+                "total": 82
+            }
+            const response = await request(app).post('/orders').send(fakeData);
+            expect(response.status).toBe(201);
+        });
+
+        test('It should return bad request when posting an order without items', async () => {
+            const fakeData = {
+                "customerId": "5865cf65321g",
+                "items": [],
+                "date": "2017-01-18",
+                "total": 82
+            }
+            const response = await request(app).post('/orders').send(fakeData);
+            expect(response.status).toBe(400);
         });
 
     });
