@@ -15,6 +15,20 @@ const factory = rep => ({
     }
   },
 
+  getById: async (request, response, next) => {
+    try {
+      const orderId = request.params.id;
+      const order = await rep.getById(orderId);
+      if (!order) {
+        response.status(404).send();
+        return;
+      }
+      response.status(200).json(order);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   create: async (request, response, next) => {
     try {
       const order = request.body;
@@ -41,15 +55,6 @@ const factory = rep => ({
     }
   },
 
-  getById: async (request, response, next) => {
-    try {
-      const orderId = request.params.id;
-      const order = await rep.getById(orderId);
-      response.status(200).json(order);
-    } catch (error) {
-      next(error);
-    }
-  },
 
 });
 

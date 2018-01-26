@@ -43,7 +43,8 @@ const factory = (logger = console, client = MongoClient) => ({
   },
 
   disconnect() {
-    return state.db.close().then(() => { state.db = null; });
+    MongoClient.disconnect();
+    console.log('Database disconnected!');
   },
 
   collection(collectionName) {

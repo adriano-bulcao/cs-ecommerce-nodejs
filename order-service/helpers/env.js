@@ -11,5 +11,9 @@ module.exports = {
     collections: {
       orders: process.env.DB_COLLECTION_ORDERS,
     },
+    test: {
+      url: process.env.DB_URL_TEST,
+      name: process.env.DB_NAME_TEST,
+    },
   },
 };

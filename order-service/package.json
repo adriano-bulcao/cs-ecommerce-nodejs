@@ -5,7 +5,8 @@
   "scripts": {
     "start": "nodemon ./index",
     "test": "jest",
-    "pretest": "./node_modules/.bin/eslint --ignore-path ../.gitignore ."
+    "test:coverage": "jest --coverage",
+    "pretest": "./node_modules/.bin/eslint ."
   },
   "dependencies": {
     "body-parser": "~1.18.2",
@@ -21,20 +22,19 @@
     "eslint": "^4.16.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
-    "jest": "^22.0.5",
+    "jest": "^22.1.4",
     "nodemon": "^1.14.11",
     "supertest": "^3.0.0"
   },
   "jest": {
     "verbose": true,
-    "collectCoverage": true,
     "collectCoverageFrom": [
       "**/*.{js,jsx}",
       "!**/node_modules/**",
       "!**/vendor/**",
       "!**/tests/**",
       "!**/coverage/**"
-    ],
-    "testRegex": "(/tests/.*|(\\.|/)(test|spec))\\.jsx?$"
+    ]
+    
   }
 }
