@@ -1,15 +1,14 @@
 'use strict'
 
-const { mongo } = require('../helpers/db')
+const { database } = require('../helpers/db')
 const { ObjectID } = require('mongodb')
 const env = require('../helpers/env')
 const schema = require('./model').schema
 const Joi = require('joi')
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
 
 const dependencies = {
-  db: mongo,
+  db: database,
   collectionName: env.db.collections.users,
 }
 
@@ -124,11 +123,11 @@ const factory = ({ db, collectionName }) => {
                   return {
                     success: true,
                     message: '',
-                    data: jwt.sign({
+                    data: {
                       email: user.email,
                       username: user.username,
                       _id: user._id
-                    }, 'RESTFULAPIs')
+                    }
                   };
                 }
               }

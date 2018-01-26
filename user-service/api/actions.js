@@ -4,12 +4,12 @@ const { repository } = require('./repository')
 
 const factory = ({ repository }) => ({
   create: async(request, response, next) => {
-    await repository.create(request.body)
+    repository.create(request.body)
       .then(user => response.status(201).json(user))
       .catch(next)
   },
   signin: async(request, response, next) => {
-    await repository.signin({
+    repository.signin({
         username: request.query.username,
         password: request.query.password
       })
@@ -17,7 +17,7 @@ const factory = ({ repository }) => ({
       .catch(next)
   },
   update: async(request, response, next) => {
-    await repository.update({
+    repository.update({
         _id: request.params.id,
         username: request.body.username,
         email: request.body.email,
