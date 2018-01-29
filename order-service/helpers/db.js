@@ -1,6 +1,11 @@
 const { MongoClient, ObjectID } = require('mongodb');
 
-const state = { db: null, connected: false };
+const state = {
+  db: null,
+  connected: false,
+  client: null,
+};
+
 
 const factory = (logger = console, client = MongoClient) => ({
 
@@ -17,8 +22,11 @@ const factory = (logger = console, client = MongoClient) => ({
         };
 
         const mongoClient = await client.connect(url, options);
-
         const db = mongoClient.db(databaseName);
+
+        state.client = mongoClient;
+        state.db = db;
+        state.connected = true;
 
         logger.info(`Database connected at ${(new Date()).toJSON()}`);
 
@@ -31,8 +39,7 @@ const factory = (logger = console, client = MongoClient) => ({
           state.connected = true;
           logger.info(`Database reconnected at ${(new Date()).toJSON()}`);
         });
-        state.db = db;
-        state.connected = true;
+
         resolve(db);
       } catch (error) {
         reject(error);
@@ -43,7 +50,7 @@ const factory = (logger = console, client = MongoClient) => ({
   },
 
   disconnect() {
-    MongoClient.disconnect();
+    state.client.close(true);
     console.log('Database disconnected!');
   },
 

@@ -105,6 +105,11 @@ function createRegisters(done) {
 
 function clearDatabase(done) {
     repository.remove()
-        .then(() => done())
+        .then(() => closeDatabase(done))
         .catch(console.error);
+}
+
+function closeDatabase(done){
+    database.disconnect();
+    done();
 }
