@@ -11,7 +11,15 @@ const dependencies = {
 const factory = ({ db, collectionName }) => ({
   getById: productId => db.collection(collectionName).findOne({ productId: productId }),
 
-  create: stock => db.collection(collectionName).insert(stock),
+  create: () => {
+         return db.collection(collectionName).insert({})
+      },
+  update: (stock) => {
+    return db.collection(collectionName).updateOne(
+        {"productId":stock.productId},
+        { $set: { "balance" : stock.balance } }
+    )
+  }
 });
 
 exports.factory = factory;

@@ -30,14 +30,25 @@ const factory = (repository) => ({
                 response.status(400).json(validation.error.details);
                 return;
               }
-        
+              
+              console.log('Teste1');
               await repository.create(request.body);
-        
+              console.log('Teste2');
               response.status(201).send("Success");
 
         }catch (error) {
             next(error);
           }
+        },
+    update: async (request, response, next) => {
+        try {
+            await repository.update(request.body);
+            response.status(200).send({
+                message: 'Estoque atualizado com sucesso!'
+            });
+        } catch (e) {
+           next(e);
+            }
         }
 });
 

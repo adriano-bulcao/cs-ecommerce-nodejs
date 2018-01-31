@@ -4,4 +4,5 @@ const { actions } = require('./actions');
 
 module.exports = Router()
   .get('/:id', actions.getById)
-  .post('/', actions.create);
+  .post('/', actions.create)
+  .put('/', actions.update)
