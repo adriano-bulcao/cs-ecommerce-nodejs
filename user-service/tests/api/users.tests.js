@@ -6,10 +6,16 @@ const env = require('../../helpers/env')
 
 describe('Validating user API', () => {
 
-    beforeEach((done) => {
+    beforeAll((done) => {
         database.connect(env.db.url, env.db.name)
             .then(() => done())
-            .catch(console.error);
+            .catch(console.error)
+    })
+
+    afterAll((done) => {
+        database.disconnect(true)
+        .then(() => done())
+        .catch(console.error)
     })
 
     test('It should GET response from /users that performs async operation.', async() => {

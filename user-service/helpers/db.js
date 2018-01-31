@@ -1,7 +1,7 @@
 'use strict'
 
 const { MongoClient, ObjectID } = require('mongodb')
-const localSatate = { db: null, connected: false }
+const localSatate = { db: null, mongoClient: null, connected: false }
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds))
 
 const factory = (state = localSatate, logger = console, client = MongoClient) => ({
@@ -27,7 +27,7 @@ const factory = (state = localSatate, logger = console, client = MongoClient) =>
                 logger.info(`Database connected at ${(new Date()).toJSON()}`);
 
                 db.on('close', () => {
-                    logger.warn(`Database connection close at ${(new Date()).toJSON()}`)
+                    logger.info(`Database connection close at ${(new Date()).toJSON()}`)
                     state.connected = false
                 });
 
@@ -36,6 +36,7 @@ const factory = (state = localSatate, logger = console, client = MongoClient) =>
                     logger.info(`Database reconnected at ${(new Date()).toJSON()}`)
                 });
                 state.db = db;
+                state.mongoClient =  mongoClient;
                 state.connected = true;
                 resolve(db);
             }
@@ -48,8 +49,8 @@ const factory = (state = localSatate, logger = console, client = MongoClient) =>
         return promise;
     },
 
-    disconnect() {
-        return state.db.close().then(() => { state.db = null })
+    disconnect(forceClose) {
+        return state.mongoClient.close(forceClose).then(() => { state.db = null })
     },
 
     collection(collectionName) {
