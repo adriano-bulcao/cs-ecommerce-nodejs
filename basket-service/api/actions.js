@@ -33,8 +33,6 @@ const factory = ({ repository }) => ({
         try {
             const basket = request.basket;
             const item = request.body;
-
-
             const stock = await getStock(`${stockApi}/${item.productId}`);
 
             if (!productIsAvailable(stock)) {
@@ -43,8 +41,7 @@ const factory = ({ repository }) => ({
             }
 
             await addItemToBasket(basket, item, repository);
-
-            await updateStockQuantity(stock, item.quantity);
+            await decrementStockQuantity(stock, item.quantity);
 
             response.status(200).json(basket);
 
@@ -75,7 +72,7 @@ const factory = ({ repository }) => ({
                 return;
             } else {
                 await updateBasketItemQuantity(basket, item, quantity, repository);
-                await updateStockQuantity(stock, quantityToAdd);
+                await decrementStockQuantity(stock, quantityToAdd);
             }
 
             response.status(200).json(basket);
@@ -89,12 +86,9 @@ const factory = ({ repository }) => ({
         try {
             const basket = request.basket;
             const itemId = request.params.itemid;
-            const item = basket.items.find(it => it.productId == itemId);
-            const index = basket.items.indexOf(item);
-            basket.items.splice(index, 1);
-
-            var result = repository.update(basket);
-
+            const item = basket.items.find(it => it.productId == itemId);            
+            await removeItemBasket(basket, item, repository);
+            await updateStock(item);
             response.status(200).json(basket);
 
         } catch (error) {
@@ -162,6 +156,17 @@ const factory = ({ repository }) => ({
     }
 });
 
+async function updateStock(item) {
+    const stock = await getStock(`${stockApi}/${item.productId}`);
+    await incrementStockQuantity(stock, item.quantity);
+}
+
+async function removeItemBasket(basket, item, repository) {
+    const index = basket.items.indexOf(item);
+    basket.items.splice(index, 1);
+    var result = await repository.update(basket);
+}
+
 async function updateBasketItemQuantity(basket, item, quantity, repository) {
     item.quantity = quantity;
     await repository.update(basket);
@@ -172,8 +177,13 @@ async function addItemToBasket(basket, item, repository) {
     await repository.update(basket);
 }
 
-async function updateStockQuantity(stock, quantity) {
+async function decrementStockQuantity(stock, quantity) {
     stock.balance = stock.balance - quantity;
+    await axios.put(stockApi, stock);
+}
+
+async function incrementStockQuantity(stock, quantity) {
+    stock.balance = stock.balance + quantity;
     await axios.put(stockApi, stock);
 }
 
