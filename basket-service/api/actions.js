@@ -5,6 +5,9 @@ const { repository } = require('./repository');
 const axios = require('axios');
 const env = require('../helpers/env');
 
+const stockApi = `${env.external.stockAPI}/stock`;
+
+
 const factory = ({ repository }) => ({
     create: async (request, response, next) => {
         try {
@@ -30,8 +33,8 @@ const factory = ({ repository }) => ({
         try {
             const basket = request.basket;
             const item = request.body;
-            const stockApi = `${env.external.stockAPI}/stock`;
-            
+
+
             const stock = await getStock(`${stockApi}/${item.productId}`);
 
             if (!productIsAvailable(stock)) {
@@ -39,9 +42,9 @@ const factory = ({ repository }) => ({
                 return;
             }
 
-            await UpdateBasket(basket, item, repository);
+            await addItemToBasket(basket, item, repository);
 
-            await updateStockQuantity(stockApi, stock, item.quantity);
+            await updateStockQuantity(stock, item.quantity);
 
             response.status(200).json(basket);
 
@@ -56,9 +59,24 @@ const factory = ({ repository }) => ({
             const itemId = request.params.itemid;
             const quantity = request.body.quantity;
             const basket = request.basket;
+
             const item = basket.items.find(it => it.productId == itemId);
-            item.quantity = quantity;
-            const result = await repository.update(basket);
+
+            if (item.quantity == quantity || quantity <= 0) {
+                response.status(400).json({ message: 'This value will not update this item. Inform another quantity!' })
+                return;
+            }
+
+            const quantityToAdd = quantity - item.quantity;
+            const stock = await getStock(`${stockApi}/${item.productId}`);
+
+            if (quantityToAdd > 0 && stock.balance < quantityToAdd) {
+                response.status(400).json({ message: 'There are no stock available to this quantity!' });
+                return;
+            } else {
+                await updateBasketItemQuantity(basket, item, quantity, repository);
+                await updateStockQuantity(stock, quantityToAdd);
+            }
 
             response.status(200).json(basket);
 
@@ -144,14 +162,19 @@ const factory = ({ repository }) => ({
     }
 });
 
-async function UpdateBasket(basket, item, repository) {
+async function updateBasketItemQuantity(basket, item, quantity, repository) {
+    item.quantity = quantity;
+    await repository.update(basket);
+}
+
+async function addItemToBasket(basket, item, repository) {
     basket.items.push(item);
     await repository.update(basket);
 }
 
-async function updateStockQuantity(stockApi, stock, quantity) {
+async function updateStockQuantity(stock, quantity) {
     stock.balance = stock.balance - quantity;
-    await axios.put(stockApi, stock);    
+    await axios.put(stockApi, stock);
 }
 
 async function getStock(endpoint) {
