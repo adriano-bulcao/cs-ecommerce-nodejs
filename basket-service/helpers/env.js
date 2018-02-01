@@ -16,5 +16,6 @@ module.exports = {
     },
     external :{
         ordersAPI : process.env.ORDERS_API_URL,
+        stockAPI : process.env.STOCK_API_URL
     }
 }

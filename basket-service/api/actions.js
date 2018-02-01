@@ -25,15 +25,23 @@ const factory = ({ repository }) => ({
         }
     },
 
-    //TODO's: 
-    // 1. Check on stock for product availability
-    // 2. Decrement product stock quantity when adding product to basket.
+
     addItem: async (request, response, next) => {
         try {
             const basket = request.basket;
             const item = request.body;
-            basket.items.push(item);
-            const result = await repository.update(basket);
+            const stockApi = `${env.external.stockAPI}/stock`;
+            
+            const stock = await getStock(`${stockApi}/${item.productId}`);
+
+            if (!productIsAvailable(stock)) {
+                response.status(400).json({ message: 'This product is not available!' });
+                return;
+            }
+
+            await UpdateBasket(basket, item, repository);
+
+            await updateStockQuantity(stockApi, stock, item.quantity);
 
             response.status(200).json(basket);
 
@@ -47,8 +55,8 @@ const factory = ({ repository }) => ({
         try {
             const itemId = request.params.itemid;
             const quantity = request.body.quantity;
-            const basket = request.basket;         
-            const item = basket.items.find(it => it.productId == itemId);            
+            const basket = request.basket;
+            const item = basket.items.find(it => it.productId == itemId);
             item.quantity = quantity;
             const result = await repository.update(basket);
 
@@ -61,12 +69,12 @@ const factory = ({ repository }) => ({
 
     removeItem: async (request, response, next) => {
         try {
-            const basket = request.basket; 
+            const basket = request.basket;
             const itemId = request.params.itemid;
             const item = basket.items.find(it => it.productId == itemId);
             const index = basket.items.indexOf(item);
             basket.items.splice(index, 1);
-            
+
             var result = repository.update(basket);
 
             response.status(200).json(basket);
@@ -111,14 +119,14 @@ const factory = ({ repository }) => ({
             basket.items = [];
 
         request.basket = basket;
-        
+
         const basketItem = basket.items.find(it => it.productId == productId);
-        
+
         if (basketItem) {
             response.status(400).json({ message: `The product ${productId} is already added to basket!` });
             return;
         }
-        
+
         next();
     },
 
@@ -135,6 +143,26 @@ const factory = ({ repository }) => ({
         next();
     }
 });
+
+async function UpdateBasket(basket, item, repository) {
+    basket.items.push(item);
+    await repository.update(basket);
+}
+
+async function updateStockQuantity(stockApi, stock, quantity) {
+    stock.balance = stock.balance - quantity;
+    await axios.put(stockApi, stock);    
+}
+
+async function getStock(endpoint) {
+    const stockResponse = await axios.get(endpoint);
+    const stock = stockResponse.data;
+    return stock;
+};
+
+function productIsAvailable(stock) {
+    return stock.balance > 0;
+}
 
 exports.factory = factory;
 exports.actions = factory({ repository });
