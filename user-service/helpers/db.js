@@ -1,67 +1,64 @@
-'use strict'
 
-const { MongoClient, ObjectID } = require('mongodb')
-const localSatate = { db: null, mongoClient: null, connected: false }
-const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds))
+
+const { MongoClient, ObjectID } = require('mongodb');
+
+const localSatate = { db: null, mongoClient: null, connected: false };
+const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 const factory = (state = localSatate, logger = console, client = MongoClient) => ({
 
-    connect(url, databaseName) {
+  connect(url, databaseName) {
+    logger.info(`Try connect to database ${databaseName}`);
 
-        logger.info(`Try connect to database ${url}`);
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        const options = {
+          promiseLibrary: Promise,
+          reconnectTries: Number.MAX_VALUE,
+          reconnectInterval: 1000,
+          autoReconnect: true,
+        };
 
-        const promise = new Promise(async (resolve, reject) => {
-            try {
+        const mongoClient = await client.connect(url, options);
 
-                const options = {
-                    promiseLibrary: Promise,
-                    reconnectTries: Number.MAX_VALUE,
-                    reconnectInterval: 1000,
-                    autoReconnect: true,
-                };
+        const db = mongoClient.db(databaseName);
 
-                const mongoClient = await client.connect(url, options);
+        logger.info(`Database connected at ${(new Date()).toJSON()}`);
 
-                const db = mongoClient.db(databaseName);
-
-                logger.info(`Database connected at ${(new Date()).toJSON()}`);
-
-                db.on('close', () => {
-                    logger.info(`Database connection close at ${(new Date()).toJSON()}`)
-                    state.connected = false
-                });
-
-                db.on('reconnect', () => {
-                    state.connected = true
-                    logger.info(`Database reconnected at ${(new Date()).toJSON()}`)
-                });
-                state.db = db;
-                state.mongoClient =  mongoClient;
-                state.connected = true;
-                resolve(db);
-            }
-            catch (error) {
-                reject(error);
-                
-            }
+        db.on('close', () => {
+          logger.info(`Database connection close at ${(new Date()).toJSON()}`);
+          state.connected = false;
         });
 
-        return promise;
-    },
+        db.on('reconnect', () => {
+          state.connected = true;
+          logger.info(`Database reconnected at ${(new Date()).toJSON()}`);
+        });
+        state.db = db;
+        state.mongoClient = mongoClient;
+        state.connected = true;
+        resolve(db);
+      } catch (error) {
+        reject(error);
+      }
+    });
 
-    disconnect(forceClose) {
-        return state.mongoClient.close(forceClose).then(() => { state.db = null })
-    },
+    return promise;
+  },
 
-    collection(collectionName) {
-        if (state.db) return state.db.collection(collectionName)
-        throw new Error('There is no connection to the database.')
-    },
+  disconnect() {
+    return state.mongoClient.close(true).then(() => { state.db = null; });
+  },
 
-    get db() { return state.db },
+  collection(collectionName) {
+    if (state.db) return state.db.collection(collectionName);
+    throw new Error('There is no connection to the database.');
+  },
 
-    ObjectID,
-})
+  get db() { return state.db; },
 
-exports.factory = factory
-exports.database = factory()
+  ObjectID,
+});
+
+exports.factory = factory;
+exports.database = factory();

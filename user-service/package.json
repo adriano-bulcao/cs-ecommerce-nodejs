@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./index",
-    "test": "jest"
+    "start": "nodemon ./index",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
@@ -13,21 +14,20 @@
     "dotenv": "^4.0.0",
     "express": "~4.15.5",
     "joi": "^13.1.0",
+    "jsonwebtoken": "^8.1.1",
     "mongodb": "^3.0.1",
     "morgan": "~1.9.0"
   },
   "devDependencies": {
-    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "jest": "^22.0.5",
+    "jest": "^22.1.4",
+    "nodemon": "^1.14.11",
     "supertest": "^3.0.0"
   },
   "jest": {
     "verbose": true,
-    "collectCoverage": true,
     "collectCoverageFrom": [
       "**/*.{js,jsx}",
       "!**/node_modules/**",
@@ -35,6 +35,6 @@
       "!**/tests/**",
       "!**/coverage/**"
     ],
-    "testRegex": "(/tests/.*|(\\.|/)(test|spec))\\.jsx?$"
+    "testRegex": "(/tests/.*|(\\.|/)(tests|spec))\\.jsx?$"
   }
 }

@@ -1,32 +1,39 @@
-'use strict'
 
-const { repository } = require('./repository')
+
+const { repository } = require('./repository');
 
 const factory = ({ repository }) => ({
-  create: async(request, response, next) => {
+  create: async (request, response, next) => {
     repository.create(request.body)
       .then(user => response.status(201).json(user))
-      .catch(next)
+      .catch(next);
   },
-  signin: async(request, response, next) => {
+  signin: async (request, response, next) => {
     repository.signin({
-        username: request.query.username,
-        password: request.query.password
-      })
+      username: request.query.username,
+      password: request.query.password,
+    })
       .then(user => response.status(200).json(user))
-      .catch(next)
+      .catch(next);
   },
-  update: async(request, response, next) => {
+  update: async (request, response, next) => {
     repository.update({
-        _id: request.params.id,
-        username: request.body.username,
-        email: request.body.email,
-        password: request.body.password
-      })
+      _id: request.params.id,
+      username: request.body.username,
+      email: request.body.email,
+      password: request.body.password,
+    })
       .then(user => response.status(200).json(user))
-      .catch(next)
-  }
-})
+      .catch(next);
+  },
+  delete: async (request, response, next) => {
+    repository.delete({
+      username: request.params.username,      
+    })
+      .then(user => response.status(200).json(user))
+      .catch(next);
+  },
+});
 
-exports.factory = factory
-exports.actions = factory({ repository })
+exports.factory = factory;
+exports.actions = factory({ repository });

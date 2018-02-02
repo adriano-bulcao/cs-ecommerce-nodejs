@@ -1,30 +1,31 @@
-'use strict'
 
-const express = require('express')
-const bodyParser = require('body-parser')
-const logger = require('morgan')
 
-const app = express()
+const express = require('express');
+const bodyParser = require('body-parser');
+const logger = require('morgan');
 
-app.use(logger('dev'))
-app.use(bodyParser.json())
-app.use('/users', require('./api'))
+const app = express();
+
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use('/users', require('./api'));
 
 app.use('/*', (request, response) =>
   response.status(404).json({
 
     success: false,
     message: `Cannot ${request.method} ${request.url}`,
-    data: null
-  }))
+    data: null,
+  }));
 
 app.use((err, request, response, next) => {
-  console.log(err)
+  console.log(err);
   response.status(500).json({
     success: false,
     message: err.message,
-    data: null
-  })
-})
+    data: null,
+  });
+  next();
+});
 
-module.exports = app
+module.exports = app;
