@@ -1,9 +1,8 @@
-'use strict'
-
-const { Router } = require('express')
-const { actions } = require('./actions')
+const { Router } = require('express');
+const { actions } = require('./actions');
 
 module.exports = Router()
-  .post('/', actions.create)
   .get('/', actions.signin)
+  .post('/', actions.create)
   .put('/:id', actions.update)
+  .delete('/:username', actions.delete);

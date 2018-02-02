@@ -6,7 +6,6 @@ const state = {
   client: null,
 };
 
-
 const factory = (logger = console, client = MongoClient) => ({
 
   connect(url, databaseName) {
@@ -50,8 +49,9 @@ const factory = (logger = console, client = MongoClient) => ({
   },
 
   disconnect() {
-    state.client.close(true);
-    console.log('Database disconnected!');
+    return state.mongoClient.close(true).then(() => {
+      state.db = null;
+    });
   },
 
   collection(collectionName) {
@@ -59,7 +59,9 @@ const factory = (logger = console, client = MongoClient) => ({
     throw new Error('There is no connection to the database.');
   },
 
-  get db() { return state.db; },
+  get db() {
+    return state.db;
+  },
 
   ObjectID,
 });

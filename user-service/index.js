@@ -1,4 +1,4 @@
-'use strict'
+
 
 const app = require('./app');
 const env = require('./helpers/env');
