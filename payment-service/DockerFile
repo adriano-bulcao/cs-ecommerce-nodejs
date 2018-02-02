@@ -1,0 +1,16 @@
+FROM Node
+
+RUN mkdir -p /payment-service
+
+WORKDIR /payment-service
+
+COPY package.json /payment-service
+
+RUN npm install
+
+COPY . /payment-service
+
+EXPOSE 3050
+
+CMD ["NODE", "app"]
+
