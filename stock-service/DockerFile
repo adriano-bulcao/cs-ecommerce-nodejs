@@ -1,0 +1,12 @@
+FROM node
+
+RUN mkdir -p /stock-service
+
+WORKDIR /stock-service
+
+COPY package.json /stock-service
+
+RUN npm install
+
+COPY . /stock-service
+

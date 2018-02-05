@@ -1,0 +1,99 @@
+version: '3'
+
+services:
+  basket:
+    image: basket-service
+    container_name: basket-service
+    build:
+      context: ./basket-service
+      dockerfile: DockerFile
+    ports:
+      - '${BASKET_PORT}:${BASKET_PORT}'
+    environment:
+      PORT: ${BASKET_PORT}      
+      ORDERS_API_URL: http://order:${ORDER_PORT} 
+      STOCK_API_URL: http://stock:${STOCK_PORT} 
+    command: npm start
+    networks:
+      - apis
+  order:
+    image: order-service
+    container_name: order-service
+    build:
+      context: ./order-service
+      dockerfile: DockerFile
+    ports:
+      - '${ORDER_PORT}:${ORDER_PORT}'
+    environment:
+      PORT: ${ORDER_PORT}            
+    command: npm start  
+    networks:
+      - apis    
+  payment:
+    image: payment-service
+    container_name: payment-service
+    build:
+      context: ./payment-service
+      dockerfile: DockerFile
+    ports:
+      - '${PAYMENT_PORT}:${PAYMENT_PORT}'
+    environment:
+      PORT: ${PAYMENT_PORT}            
+    command: npm start
+    networks:
+      - apis    
+  product:
+    image: product-service
+    container_name: product-service
+    build:
+      context: ./product-service
+      dockerfile: DockerFile
+    ports:
+      - '${PRODUCT_PORT}:${PRODUCT_PORT}'
+    environment:
+      PORT: ${PRODUCT_PORT}            
+    command: npm start   
+    networks:
+      - apis    
+  # shipping:
+  #   image: shipping-service
+  #   container_name: shipping-service
+  #   build:
+  #     context: ./shipping-service
+  #     dockerfile: DockerFile
+  #   ports:
+  #     - '${SHIPPING_PORT}:${SHIPPING_PORT}'
+  #   environment:
+  #     PORT: ${SHIPPING_PORT}            
+  #   command: npm start   
+  # networks:
+  #   - apis  
+  stock:
+    image: stock-service
+    container_name: stock-service
+    build:
+      context: ./stock-service
+      dockerfile: DockerFile
+    ports:
+      - '${STOCK_PORT}:${STOCK_PORT}'
+    environment:
+      PORT: ${STOCK_PORT}            
+    command: npm start        
+    networks:
+      - apis    
+  user:
+    image: user-service
+    container_name: user-service
+    build:
+      context: ./user-service
+      dockerfile: DockerFile
+    ports:
+      - '${USER_PORT}:${USER_PORT}'
+    environment:
+      PORT: ${USER_PORT}
+    command: npm start
+    networks:
+      - apis    
+networks: 
+  apis:
+

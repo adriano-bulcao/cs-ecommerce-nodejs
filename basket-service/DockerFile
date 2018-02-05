@@ -1,0 +1,12 @@
+FROM node
+
+RUN mkdir -p /basket-service
+
+WORKDIR /basket-service
+
+COPY package.json /basket-service
+
+RUN npm install
+
+COPY . /basket-service
+

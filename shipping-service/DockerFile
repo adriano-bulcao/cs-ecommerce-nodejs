@@ -1,0 +1,12 @@
+FROM node
+
+RUN mkdir -p /shipping-service
+
+WORKDIR /shipping-service
+
+COPY package.json /shipping-service
+
+RUN npm install
+
+COPY . /shipping-service
+

@@ -1,4 +1,4 @@
-FROM Node
+FROM node
 
 RUN mkdir -p /payment-service
 
@@ -9,8 +9,4 @@ COPY package.json /payment-service
 RUN npm install
 
 COPY . /payment-service
-
-EXPOSE 3050
-
-CMD ["NODE", "app"]
 

@@ -1,0 +1,12 @@
+FROM node
+
+RUN mkdir -p /user-service
+
+WORKDIR /user-service
+
+COPY package.json /user-service
+
+RUN npm install
+
+COPY . /user-service
+

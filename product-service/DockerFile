@@ -1,0 +1,12 @@
+FROM node
+
+RUN mkdir -p /product-service
+
+WORKDIR /product-service
+
+COPY package.json /product-service
+
+RUN npm install
+
+COPY . /product-service
+

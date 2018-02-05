@@ -3,12 +3,6 @@ const { repository } = require('./repository');
 const { schema } = require('./model');
 const { crypt } = require('../helpers/crypt');
 
-encryptData = payment => {
-    payment.creditCard.number = crypt.encrypt(payment.creditCard.number);
-    payment.creditCard.cvc = crypt.encrypt(payment.creditCard.cvc);
-    return payment;
-}
-
 const factory = repository => ({
     create: async (request, response, next) => {
         try {
@@ -46,6 +40,12 @@ const factory = repository => ({
         }
     }
 })
+
+const encryptData = payment => {
+    payment.creditCard.number = crypt.encrypt(payment.creditCard.number);
+    payment.creditCard.cvc = crypt.encrypt(payment.creditCard.cvc);
+    return payment;
+}
 
 exports.factory = factory;
 exports.actions = factory(repository);

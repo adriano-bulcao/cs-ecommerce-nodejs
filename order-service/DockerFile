@@ -1,0 +1,12 @@
+FROM node
+
+RUN mkdir -p /order-service
+
+WORKDIR /order-service
+
+COPY package.json /order-service
+
+RUN npm install
+
+COPY . /order-service
+
