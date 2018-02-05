@@ -1,14 +1,19 @@
 const Joi = require('joi');
 const { repository } = require('./repository');
 const { schema } = require('./model');
-const crypt = require('../helpers/crypt');
+const { crypt } = require('../helpers/crypt');
+
+encryptData = payment => {
+    payment.creditCard.number = crypt.encrypt(payment.creditCard.number);
+    payment.creditCard.cvc = crypt.encrypt(payment.creditCard.cvc);
+    return payment;
+}
 
 const factory = repository => ({
     create: async (request, response, next) => {
         try {
             const payment = request.body;
             payment.date = new Date();
-            payment.creditCard.number = crypt().encrypt(payment.creditCard.number);
 
             const validation = Joi.validate(payment, schema);
             if (validation.error) {
@@ -16,9 +21,13 @@ const factory = repository => ({
                 return;
             }
 
-            await repository.create(request.body);
+            let formatedPayment = encryptData(payment);
 
-            response.status(201).send(request);
+            await repository.create(formatedPayment);
+
+            response.status(201).send({
+                paymentNumber: formatedPayment._id
+            });
         } catch (error) {
             next(error);
         }
