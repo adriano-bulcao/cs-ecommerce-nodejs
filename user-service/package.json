@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./index",
-    "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test": "jest --coverage",
+    "test:coverage": "jest --coverage",
+    "pretest": "./node_modules/.bin/eslint ."
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
@@ -33,7 +34,9 @@
       "!**/node_modules/**",
       "!**/vendor/**",
       "!**/tests/**",
-      "!**/coverage/**"
+      "!**/coverage/**",
+      "!.eslintrc.js",
+      "!index.js"
     ],
     "testRegex": "(/tests/.*|(\\.|/)(tests|spec))\\.jsx?$"
   }

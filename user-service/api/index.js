@@ -5,4 +5,4 @@ module.exports = Router()
   .get('/', actions.signin)
   .post('/', actions.create)
   .put('/:id', actions.update)
-  .delete('/:username', actions.delete);
+  .delete('/', actions.delete);
