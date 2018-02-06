@@ -1,7 +1,4 @@
 
-
-const { repository } = require('./repository');
-
 const factory = ({ repository }) => ({
   create: async (request, response, next) => {
     repository.create(request.body)
@@ -28,12 +25,16 @@ const factory = ({ repository }) => ({
   },
   delete: async (request, response, next) => {
     repository.delete({
-      username: request.params.username,      
+      username: request.body.username,
+      email: request.body.email,
+      password: request.body.password,
     })
       .then(user => response.status(200).json(user))
       .catch(next);
   },
 });
+
+const { repository } = require('./repository');
 
 exports.factory = factory;
 exports.actions = factory({ repository });

@@ -1,11 +1,20 @@
-
-
 const { MongoClient, ObjectID } = require('mongodb');
 
-const localSatate = { db: null, mongoClient: null, connected: false };
-const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
+const localState = {
+  db: null,
+  mongoClient: null,
+  connected: false,
+};
 
-const factory = (state = localSatate, logger = console, client = MongoClient) => ({
+const dependencies = {
+  state: localState,
+  logger: console,
+  client: MongoClient,
+};
+
+/* eslint-disable no-param-reassign */
+
+const factory = ({ state, logger, client }) => ({
 
   connect(url, databaseName) {
     logger.info(`Try connect to database ${databaseName}`);
@@ -47,7 +56,9 @@ const factory = (state = localSatate, logger = console, client = MongoClient) =>
   },
 
   disconnect() {
-    return state.mongoClient.close(true).then(() => { state.db = null; });
+    return state.mongoClient.close(true).then(() => {
+      state.db = null;
+    });
   },
 
   collection(collectionName) {
@@ -55,10 +66,14 @@ const factory = (state = localSatate, logger = console, client = MongoClient) =>
     throw new Error('There is no connection to the database.');
   },
 
-  get db() { return state.db; },
+  get db() {
+    return state.db;
+  },
 
   ObjectID,
 });
 
+/* eslint-enable no-param-reassign */
+
 exports.factory = factory;
-exports.database = factory();
+exports.database = factory(dependencies);
