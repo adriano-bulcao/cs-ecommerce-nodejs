@@ -13,9 +13,12 @@ services:
       PORT: ${BASKET_PORT}      
       ORDERS_API_URL: http://order:${ORDER_PORT} 
       STOCK_API_URL: http://stock:${STOCK_PORT} 
+      DB_URL: mongodb://database:27017 
     command: npm start
     networks:
-      - apis
+      - apis   
+    depends_on:    
+      - database
   order:
     image: order-service
     container_name: order-service
@@ -25,10 +28,13 @@ services:
     ports:
       - '${ORDER_PORT}:${ORDER_PORT}'
     environment:
-      PORT: ${ORDER_PORT}            
+      PORT: ${ORDER_PORT}         
+      DB_URL: mongodb://database:27017    
     command: npm start  
     networks:
-      - apis    
+      - apis 
+    depends_on:    
+      - database         
   payment:
     image: payment-service
     container_name: payment-service
@@ -39,9 +45,12 @@ services:
       - '${PAYMENT_PORT}:${PAYMENT_PORT}'
     environment:
       PORT: ${PAYMENT_PORT}            
+      DB_URL: mongodb://database:27017 
     command: npm start
     networks:
-      - apis    
+      - apis  
+    depends_on:    
+      - database      
   product:
     image: product-service
     container_name: product-service
@@ -51,10 +60,13 @@ services:
     ports:
       - '${PRODUCT_PORT}:${PRODUCT_PORT}'
     environment:
-      PORT: ${PRODUCT_PORT}            
+      PORT: ${PRODUCT_PORT}  
+      DB_URL: mongodb://database:27017           
     command: npm start   
     networks:
-      - apis    
+      - apis   
+    depends_on:    
+      - database       
   # shipping:
   #   image: shipping-service
   #   container_name: shipping-service
@@ -64,10 +76,11 @@ services:
   #   ports:
   #     - '${SHIPPING_PORT}:${SHIPPING_PORT}'
   #   environment:
-  #     PORT: ${SHIPPING_PORT}            
+  #     PORT: ${SHIPPING_PORT} 
+  #     DB_URL: mongodb://database:27017            
   #   command: npm start   
-  # networks:
-  #   - apis  
+  #   networks:
+  #     - apis  
   stock:
     image: stock-service
     container_name: stock-service
@@ -80,7 +93,9 @@ services:
       PORT: ${STOCK_PORT}            
     command: npm start        
     networks:
-      - apis    
+      - apis 
+    depends_on:    
+      - database         
   user:
     image: user-service
     container_name: user-service
@@ -91,9 +106,22 @@ services:
       - '${USER_PORT}:${USER_PORT}'
     environment:
       PORT: ${USER_PORT}
+      DB_URL: mongodb://database:27017 
     command: npm start
     networks:
-      - apis    
+      - apis  
+    depends_on:    
+      - database      
+  database:
+    image: mongo:latest
+    container_name: "mongodb"
+    volumes:
+      - csecommerce:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - apis
+volumes:
+    csecommerce:
 networks: 
   apis:
-
