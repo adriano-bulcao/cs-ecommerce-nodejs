@@ -90,7 +90,7 @@ const factory = ({ db, collectionName }) => ({
       return reject(result.error);
     }
     return resolve(db.collection(collectionName)
-      .remove({
+      .deleteOne({
         username: data.username,
       }).then((user) => {
         if (!!user.result.n === false) {
