@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./index",
+    "start": "nodemon -L ./index",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "pretest": "./node_modules/.bin/eslint ."

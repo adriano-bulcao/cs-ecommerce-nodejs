@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./index",
+    "start": "nodemon -L ./index",
     "test": "jest"
   },
   "dependencies": {
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "jest": "^22.0.5",
+    "nodemon": "^1.14.12",
     "supertest": "^3.0.0"
   },
   "jest": {
