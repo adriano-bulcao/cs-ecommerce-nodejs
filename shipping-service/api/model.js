@@ -3,7 +3,7 @@
 const Joi = require('joi');
 
 const schema = Joi.object().keys({
-    orderId: Joi.number().required(),
+    orderId: Joi.string().required(),
     status: Joi.number().required()
 });
 
