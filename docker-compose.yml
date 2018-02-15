@@ -39,7 +39,8 @@ services:
     depends_on:    
       - database 
     volumes:
-      - "./order-service:/order-service"                 
+      - "./order-service:/order-service"   
+      - ./order-service/node_modules               
   payment:
     image: payment-service
     container_name: payment-service
@@ -141,6 +142,18 @@ services:
       - 27017:27017
     networks:
       - apis
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "8080:15672"
+    networks:
+      - apis
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    volumes:
+      - ./docker:/var/run/docker.sock
 volumes:
     csecommerce:
 networks: 
