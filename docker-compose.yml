@@ -20,7 +20,8 @@ services:
     depends_on:    
       - database
     volumes:
-      - "./basket-service:/basket-service"   
+      - "./basket-service:/basket-service"
+      - ./basket-service/node_modules
   order:
     image: order-service
     container_name: order-service
@@ -56,7 +57,8 @@ services:
     depends_on:    
       - database      
     volumes:
-      - "./payment-service:/payment-service"      
+      - "./payment-service:/payment-service"
+      - ./payment-service/node_modules 
   product:
     image: product-service
     container_name: product-service
@@ -74,7 +76,8 @@ services:
     depends_on:    
       - database 
     volumes:
-      - "./product-service:/product-service"         
+      - "./product-service:/product-service"      
+      - ./product-service/node_modules         
   # shipping:
   #   image: shipping-service
   #   container_name: shipping-service
@@ -89,8 +92,9 @@ services:
   #   command: npm start   
   #   networks:
   #     - apis 
-  # volumes:
-  #   - "./shipping-service:/shipping-service"  
+  #   volumes:
+  #     - "./shipping-service:/shipping-service"  
+  #     - ./shipping-service/node_modules   
   stock:
     image: stock-service
     container_name: stock-service
@@ -107,25 +111,27 @@ services:
     depends_on:    
       - database  
     volumes:
-      - "./stock-service:/stock-service"               
+      - "./stock-service:/stock-service"       
+      - ./stock-service/node_modules           
   user:
-  image: user-service
-  container_name: user-service
-  build:
-    context: ./user-service
-    dockerfile: DockerFile
-  ports:
-    - '${USER_PORT}:${USER_PORT}'
-  environment:
-    PORT: ${USER_PORT}
-    DB_URL: mongodb://database:27017 
-  command: npm start
-  networks:
-    - apis  
-  depends_on:    
-    - database      
-  volumes:
-    - "./user-service:/user-service"    
+    image: user-service
+    container_name: user-service
+    build:
+      context: ./user-service
+      dockerfile: DockerFile
+    ports:
+      - '${USER_PORT}:${USER_PORT}'
+    environment:
+      PORT: ${USER_PORT}
+      DB_URL: mongodb://database:27017 
+    command: npm start
+    networks:
+      - apis  
+    depends_on:    
+      - database      
+    volumes:
+      - "./user-service:/user-service"    
+      - ./user-service/node_modules   
   database:
     image: mongo:latest
     container_name: "mongodb"
