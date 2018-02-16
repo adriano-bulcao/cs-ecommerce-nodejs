@@ -4,6 +4,7 @@ module.exports = {
   name: process.env.NODE_ENV,
   app: {
     port: process.env.PORT,
+    serviceName: process.env.SERVICE_NAME,
   },
   db: {
     name: process.env.DB_NAME,

@@ -5,7 +5,9 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 
 const app = express();
-
+app.get('/hc', (req, res) => {
+  res.status(200).send("ok");
+});
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use('/users', require('./api'));

@@ -2,7 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
-
+app.get('/hc', (req, res) => {
+  res.status(200).send("ok");
+});
 app.use(bodyParser.json());
 app.use('/', require('./api'));
 
