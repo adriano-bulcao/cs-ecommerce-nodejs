@@ -1,6 +1,8 @@
 var Channel = require('./channel');
 
-var queue = 'queue';
+module.exports = receive;
+
+function receive(queue, msg){
 
 Channel(queue, function(err, channel, conn) {  
   if (err) {
@@ -32,3 +34,4 @@ Channel(queue, function(err, channel, conn) {
     }
   }
 });
+}
