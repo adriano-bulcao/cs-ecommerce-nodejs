@@ -6,6 +6,7 @@ module.exports = {
   app: {
     port: process.env.PORT,
     secret: process.env.SECRET,
+    serviceName: process.env.SERVICE_NAME,
   },
   db: {
     name: process.env.DB_NAME,

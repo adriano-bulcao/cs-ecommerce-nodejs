@@ -31,7 +31,7 @@ const factory = ({ repository }) => ({
     })
       .then(user => response.status(200).json(user))
       .catch(next);
-  },
+  }
 });
 
 const { repository } = require('./repository');
