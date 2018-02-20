@@ -2,6 +2,8 @@
 
 Node.js min version: 7.6.0
 
+To run all services
+    docker-compose up -d
 
 Consul UI - > http://localhost:8500
 
