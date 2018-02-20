@@ -4,27 +4,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 var addRequestId = require('express-request-id')();
-const rabbit = require('./rabbit');
+
 const checkout = require('./event/checkoutAcceptedEventHandler');
 const app = express();
-rabbit.start();
 app.use(addRequestId);
 app.get('/hc', (req, res) => {
   res.status(200).send("ok");
-});
-
-app.get('/checkout', async (req, res, next) => {
-  console.log(req.id);
-  var subscription = checkout.filter(it => req.id == it.id).subscribe(x => {
-    subscription.dispose();
-    console.log("order created! " + x)
-    res.status(200).send("order created! " + x);
-  },
-    (err) => {
-      res.status(500).send("order created! " + err);
-      console.log('Error: ' + err);
-    }
-  );
 });
 
 app.use(logger('dev'));
