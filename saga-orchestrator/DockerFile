@@ -1,0 +1,12 @@
+FROM node
+
+RUN mkdir -p /saga-orchestrator
+
+WORKDIR /saga-orchestrator
+
+COPY package.json /saga-orchestrator
+
+RUN npm install
+
+COPY . /saga-orchestrator
+
