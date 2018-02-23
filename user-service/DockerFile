@@ -10,3 +10,5 @@ RUN npm install
 
 COPY . /user-service
 
+RUN npm install -g nodemon
+

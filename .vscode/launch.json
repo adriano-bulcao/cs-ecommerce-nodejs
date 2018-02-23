@@ -6,9 +6,15 @@
     "configurations": [
         {
             "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}\\user-service\\index"
-        }
+            "request": "attach",
+            "name": "Attach User Service",
+            "port": 5859,
+            "address": "localhost",
+            "localRoot": "${workspaceFolder}/user-service",
+            "remoteRoot": "/user-service",
+            "protocol": "inspector",
+            "restart": true,
+            "sourceMaps": false
+        },
     ]
 }
