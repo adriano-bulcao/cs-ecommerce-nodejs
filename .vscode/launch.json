@@ -5,10 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}\\user-service\\index"
-        }
+           "type": "node",
+           "request": "attach",
+           "name": "Docker: Attach to Node",
+           "port": 5858,
+           "address": "localhost",
+           "localRoot": "${workspaceFolder}/order-saga-orchestrator",
+           "remoteRoot": "/order-saga-orchestrator",
+           "protocol": "inspector",
+           "restart": true,
+           "sourceMaps": false
+       }
     ]
 }

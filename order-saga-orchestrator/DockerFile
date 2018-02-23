@@ -1,0 +1,13 @@
+FROM node
+
+RUN mkdir -p /order-saga-orchestrator
+
+WORKDIR /order-saga-orchestrator
+
+COPY package.json /order-saga-orchestrator
+
+RUN npm install
+
+COPY . /order-saga-orchestrator
+
+RUN npm install -g nodemon

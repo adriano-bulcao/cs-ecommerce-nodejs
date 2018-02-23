@@ -17,6 +17,8 @@ const dependencies = {
 const factory = ({ state, logger, client }) => ({
 
   connect(url, databaseName) {
+    console.log(url)
+    console.log(databaseName)
     logger.info(`Try connect to database ${databaseName}`);
 
     const promise = new Promise(async (resolve, reject) => {
