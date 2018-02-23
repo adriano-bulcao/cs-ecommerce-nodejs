@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 var addRequestId = require('express-request-id')();
 
-const checkout = require('./event/checkoutAcceptedEventHandler');
 const app = express();
 app.use(addRequestId);
 app.get('/hc', (req, res) => {

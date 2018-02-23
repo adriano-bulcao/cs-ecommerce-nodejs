@@ -5,6 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
+<<<<<<< HEAD
            "type": "node",
            "request": "attach",
            "name": "Docker: Attach to Node",
@@ -16,5 +17,18 @@
            "restart": true,
            "sourceMaps": false
        }
+=======
+            "type": "node",
+            "request": "attach",
+            "name": "Attach User Service",
+            "port": 5859,
+            "address": "localhost",
+            "localRoot": "${workspaceFolder}/user-service",
+            "remoteRoot": "/user-service",
+            "protocol": "inspector",
+            "restart": true,
+            "sourceMaps": false
+        },
+>>>>>>> b2f99bbbf5bc4c6e663a3366d43c57ef3ff2ef1c
     ]
 }

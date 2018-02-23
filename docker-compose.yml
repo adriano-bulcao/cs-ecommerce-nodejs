@@ -127,11 +127,12 @@ services:
       dockerfile: DockerFile
     ports:
       - '${USER_PORT}:${USER_PORT}'
+      - '5859:5858'
     environment:
       PORT: ${USER_PORT}
       DB_URL: mongodb://database:27017
       SERVICE_NAME: user-service
-    command: npm start
+    command: nodemon -L --inspect=0.0.0.0:5858 ./index.js
     networks:
       - apis  
     depends_on:    
