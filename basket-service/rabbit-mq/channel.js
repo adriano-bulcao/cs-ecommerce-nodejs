@@ -4,7 +4,7 @@ var url = process.env.AMQP_URL || 'amqp://user:password@rabbitmq';
 
 module.exports = createQueueChannel;
 
-function createQueueChannel(queue, cb) {  
+function createQueueChannel(exchange, queue, cb) {  
   amqp.connect(url, onceConnected);
 
 function onceConnected(err, conn) {  
@@ -17,7 +17,6 @@ function onceConnected(err, conn) {
     conn.createChannel(onceChannelCreated);
   }
         function onceChannelCreated(err, channel) {  
-            var exchange = 'basket'
         if (err) {
             cb(err);
         }

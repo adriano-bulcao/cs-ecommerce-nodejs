@@ -1,0 +1,29 @@
+{
+  "name": "saga-orchestrator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon -L ./index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "~1.18.2",
+    "consul": "^0.30.0",
+    "debug": "~2.6.9",
+    "dotenv": "^4.0.0",
+    "express": "~4.15.5",
+    "joi": "^13.1.2",
+    "mongodb": "^3.0.1",
+    "morgan": "~1.9.0",
+    "rabbot": "^2.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "jest": "^22.1.4",
+    "nodemon": "^1.14.11",
+    "supertest": "^3.0.0"
+  }
+}

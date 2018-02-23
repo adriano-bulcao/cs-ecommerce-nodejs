@@ -170,6 +170,27 @@ services:
       - "8600:8600/udp"
     networks:
       - apis
+  saga:
+    image: saga-orchestrator
+    container_name: saga-orchestrator
+    build:
+      context: ./saga-orchestrator
+      dockerfile: DockerFile
+    ports:
+      - '${SAGA_PORT}:${SAGA_PORT}'
+    environment:
+      PORT: ${SAGA_PORT}
+      ORDERS_API_URL: http://order:${ORDER_PORT} 
+      DB_URL: mongodb://database:27017
+      SERVICE_NAME: saga-orchestrator      
+    command: npm start  
+    networks:
+      - apis 
+    depends_on:    
+      - database 
+    volumes:
+      - "./saga-orchestrator:/saga-orchestrator"   
+      - ./saga-orchestrator/node_modules               
 volumes:
     csecommerce:
 networks: 
