@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const logger = console;
+const rabbit = require('./messaging/rabbit');
 
 app.get('/hc', (req, res) => {
     res.status(200).send("ok");

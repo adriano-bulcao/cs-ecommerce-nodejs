@@ -3,6 +3,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const logger = require('morgan')
+const rabbit = require('./messaging/rabbit');
 
 const app = express()
 app.get('/hc', (req, res) => {

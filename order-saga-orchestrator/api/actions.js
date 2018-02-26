@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const { repository } = require('./repository');
 const { schema } = require('./model');
-
+const rabbit = require('rabbot');
 
 const factory = rep => ({
   getAll: async (request, response, next) => {
@@ -29,13 +29,18 @@ const factory = rep => ({
   create: async (request, response, next) => {
     try {
       console.log(request.body)
+
       const validation = Joi.validate(request.body, schema);
       if (validation.error) {
         response.status(400).json(validation.error.details);
         return;
       }
-      let x = await rep.create(request.body);
-      console.log(x)
+      await rep.create(request.body);
+      rabbit.publish("order.exchange","order.created",
+        {
+          body: { text: "Order Created" },
+        }
+      );
       response.status(201).send();
     } catch (error) {
       next(error);
