@@ -1,16 +1,18 @@
-const orderSagaOrchestrator = require('./order-saga-orchestrator')
-const saga = new orderSagaOrchestrator();
+const OrderSagaOrchestrator = require('./order-saga-orchestrator');
 
+const saga = new OrderSagaOrchestrator();
 
-const factory = events => ({
-    orderCreated: (message) => {
-        return new Promise((resolve, reject) => {
-            resolve();
-            saga.createOrder(message);
-        });
-    },
-})
+const factory = {
+  orderCreated: message =>
+    new Promise((resolve, reject) => {
+      try {
+        resolve();
+        saga.createOrder(message);
+      } catch (error) {
+        throw reject(error);
+      }
+    }),
+};
 
 exports.factory = factory;
 exports.events = factory();
-

@@ -9,15 +9,15 @@ module.exports = {
     },
     queues: [
         {
-            name: 'stock.queue', autoDelete: false, subscribe: true,
+            name: 'payment.queue', autoDelete: false, subscribe: true,
             exclusive: false, arguments: { 'x-queue-mode': 'lazy' }
         }
     ],
     exchanges: [
-        { name: 'stock.exchange', type: 'fanout', autoDelete: false, durable: false }
+        { name: 'payment.exchange', type: 'fanout', autoDelete: false, durable: false }
     ]
     ,
     bindings: [
-      { exchange: 'order.exchange', target: 'stock.queue', keys: [] }
+      { exchange: 'order.exchange', target: 'payment.queue', keys: [] }
     ]
 }

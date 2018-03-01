@@ -28,7 +28,7 @@ const factory = rep => ({
   },
   create: async (request, response, next) => {
     try {
-      console.log(request.body)
+      console.log(request.body);
 
       const validation = Joi.validate(request.body, schema);
       if (validation.error) {
@@ -36,19 +36,15 @@ const factory = rep => ({
         return;
       }
       await rep.create(request.body);
-      rabbit.publish("order.exchange","order.created",
-        {
-          body: { text: "Order Created" },
-        }
-      );
+      rabbit.publish('order.exchange', 'order.created', {
+        body: { text: 'Order Created' },
+      });
       response.status(201).send();
     } catch (error) {
       next(error);
     }
-  }
-})
-
-
+  },
+});
 
 exports.factory = factory;
 exports.actions = factory(repository);

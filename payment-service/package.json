@@ -18,7 +18,8 @@
     "jest": "^22.0.5",
     "nodemon": "^1.14.12",
     "sinon": "^4.2.2",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "rabbot": "^2.1.0"
   },
   "jest": {
     "verbose": true,

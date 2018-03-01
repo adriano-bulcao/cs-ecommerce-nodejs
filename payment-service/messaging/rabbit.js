@@ -30,12 +30,12 @@ class Rabbit {
 
 
 Rabbit.start()
-    .addHandler("stock.queue", "order.created", (message) => {
+    .addHandler("payment.queue", "order.created", (message) => {
         return new Promise((resolve, reject) => {
-            console.log("Stock reserved.")
-            rabbit.publish("stock.exchange", "stock.reserved",
+            console.log("Payment completed.")
+            rabbit.publish("payment.exchange", "payment.completed",
                 {
-                    body: { text: "Stock Reserved" },
+                    body: { text: "Payment Completed" },
                 }
             )
             resolve();

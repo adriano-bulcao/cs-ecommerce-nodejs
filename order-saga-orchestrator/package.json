@@ -21,7 +21,7 @@
   "devDependencies": {
     "eslint": "^4.16.0",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-import": "^2.9.0",
     "jest": "^22.1.4",
     "nodemon": "^1.14.11",
     "supertest": "^3.0.0"

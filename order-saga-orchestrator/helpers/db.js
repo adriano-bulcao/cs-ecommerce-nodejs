@@ -15,10 +15,7 @@ const dependencies = {
 /* eslint-disable no-param-reassign */
 
 const factory = ({ state, logger, client }) => ({
-
   connect(url, databaseName) {
-    console.log(url)
-    console.log(databaseName)
     logger.info(`Try connect to database ${databaseName}`);
 
     const promise = new Promise(async (resolve, reject) => {
@@ -34,16 +31,16 @@ const factory = ({ state, logger, client }) => ({
 
         const db = mongoClient.db(databaseName);
 
-        logger.info(`Database connected at ${(new Date()).toJSON()}`);
+        logger.info(`Database connected at ${new Date().toJSON()}`);
 
         db.on('close', () => {
-          logger.info(`Database connection close at ${(new Date()).toJSON()}`);
+          logger.info(`Database connection close at ${new Date().toJSON()}`);
           state.connected = false;
         });
 
         db.on('reconnect', () => {
           state.connected = true;
-          logger.info(`Database reconnected at ${(new Date()).toJSON()}`);
+          logger.info(`Database reconnected at ${new Date().toJSON()}`);
         });
         state.db = db;
         state.mongoClient = mongoClient;
